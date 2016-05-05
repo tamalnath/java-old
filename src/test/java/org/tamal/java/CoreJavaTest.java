@@ -17,12 +17,8 @@ import org.junit.Test;
 @SuppressWarnings("static-method")
 public class CoreJavaTest {
 
-	private static void staticMethod() {
-		// Empty
-	}
-
 	/**
-	 * This method proves instanceof operator yields false for null.
+	 * This method proves that cloned object equals to the original object but not identical.
 	 */
 	@Test
 	public void testClone() {
@@ -33,7 +29,7 @@ public class CoreJavaTest {
 	}
 
 	/**
-	 * This method proves instanceof operator yields false for null.
+	 * This test proves that objects that don't implement {@link Cloneable} interface will throw {@link CloneNotSupportedException}.
 	 * @throws CloneNotSupportedException as NotClonable do not implement {@link Cloneable} interface
 	 */
 	@Test(expected = CloneNotSupportedException.class)
@@ -145,6 +141,10 @@ public class CoreJavaTest {
 	public void testStaticMethod() {
 		CoreJavaTest cc = null;
 		cc.staticMethod();
+	}
+
+	private static void staticMethod() {
+		// Empty
 	}
 
 	private class NotClonable {

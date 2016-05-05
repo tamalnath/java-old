@@ -99,16 +99,19 @@ public class MathTest {
 	 */
 	@Test
 	public void testNaN() {
-		double d = 0.0d;
-		assertFalse(Double.NaN < d);
-		assertFalse(Double.NaN <= d);
-		assertFalse(Double.NaN > d);
-		assertFalse(Double.NaN >= d);
-		assertFalse(Double.NaN == d);
-		assertTrue(Double.NaN != d);
-		double NaN = 0.0d/0.0;
-		assertTrue(Double.isNaN(NaN));
-		assertFalse(Double.NaN == NaN);
+		double x = 0.0d;
+		double y = -0.0d/0.0;
+		assertFalse(x != x);
+		assertTrue(y != y);
+		assertTrue(Double.isNaN(y));
+		assertFalse(Double.NaN == y);
+		assertFalse(x < y);
+		assertFalse(x <= y);
+		assertFalse(x > y);
+		assertFalse(x >= y);
+		assertFalse(x == y);
+		assertTrue(x != y);
+		assertFalse((x < y) == !(x >= y));
 	}
 
 	/**
@@ -125,6 +128,50 @@ public class MathTest {
 		assertEquals(0b0000_0000_0000_0000_0000_0000_0000_0000, i);
 		i = i - 1;
 		assertEquals(0b1111_1111_1111_1111_1111_1111_1111_1111, i);
+	}
+
+	/**
+	 * This test demonstrates the IEEE 754 single precision floating point conversion.
+	 */
+	@Test
+	public void testFloat() {
+		float f = Float.MAX_VALUE;
+		int i = 0b0_11111110_11111111111111111111111;
+		assertEquals(i, Float.floatToIntBits(f));
+
+		f=Float.POSITIVE_INFINITY;
+		i = 0b0_11111111_00000000000000000000000;
+		assertEquals(i, Float.floatToIntBits(f));
+
+		i = 0b0_11111111_00000000000000000000001;
+		f = Float.intBitsToFloat(i);
+		assertTrue(Float.isNaN(f));
+		assertFalse(f == Float.NaN);
+
+		i = 0b0_11111111_10000000000000000000000;
+		f = Float.intBitsToFloat(i);
+		assertTrue(Float.isNaN(f));
+		assertEquals(i, Float.floatToIntBits(Float.NaN));
+
+		i = 0b0_11111111_11111111111111111111111;
+		f = Float.intBitsToFloat(i);
+		assertTrue(Float.isNaN(f));
+
+		f = Float.MIN_VALUE;
+		i = 0b0_00000000_00000000000000000000001;
+		assertEquals(i, Float.floatToIntBits(f));
+
+		f = 0.0F;
+		i = 0b0_00000000_00000000000000000000000;
+		assertEquals(i, Float.floatToIntBits(f));
+
+		f = -0.0F;
+		i = 0b1_00000000_00000000000000000000000;
+		assertEquals(i, Float.floatToIntBits(f));
+
+		assertFalse( 0.0F > -0.0F);
+		assertFalse( 0.0F < -0.0F);
+		assertEquals(1, Float.compare(0.0f, -0.0f));
 	}
 
 }
