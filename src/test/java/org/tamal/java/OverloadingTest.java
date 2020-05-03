@@ -1,15 +1,17 @@
 package org.tamal.java;
 
-import static org.junit.Assert.assertEquals;
+
+import org.testng.annotations.Test;
 
 import java.io.Serializable;
 
-import org.junit.Test;
+import static org.testng.Assert.assertEquals;
+
 
 /**
  * @author Tamal Kanti Nath
  */
-@SuppressWarnings({ "static-method", "unused" })
+@SuppressWarnings({"static-method", "unused"})
 public class OverloadingTest {
 
 	/**

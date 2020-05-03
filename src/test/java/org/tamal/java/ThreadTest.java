@@ -1,10 +1,6 @@
 package org.tamal.java;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import org.testng.annotations.Test;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
@@ -14,32 +10,38 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.junit.Test;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
 
 /**
  * @author Tamal Kanti Nath
  */
-@SuppressWarnings({ "static-method", "synthetic-access" })
 public class ThreadTest {
 
 	private static final int ITERATIONS = 10_000;
-	private Object syncLock = new Object();
+	private final Object syncLock = new Object();
 	private boolean interrupted;
 	private int x;
 
 	/**
 	 * This test proves that non-synchronized methods may return unexpected results due to thread cache.
+	 *
 	 * @throws InterruptedException if unexpected results are not thrown after 10 iterations
 	 */
 	@Test
 	public void testCounter() throws InterruptedException {
+		x = 0;
 		while (true) {
-			Thread t1 = new Thread(() -> increment());
-			Thread t2 = new Thread(() -> decrement());
+			Thread t1 = new Thread(this::increment);
+			Thread t2 = new Thread(this::decrement);
 			t1.start();
 			t2.start();
 			t1.join();
 			t2.join();
+			System.out.println("non-synchronized counter (x) value: " + x);
 			if (x != 0) {
 				return;
 			}
@@ -64,13 +66,14 @@ public class ThreadTest {
 	 */
 	@Test
 	public void testSynchronizedCounter() throws InterruptedException {
-		Thread t1 = new Thread(() -> incrementSynchronized());
-		Thread t2 = new Thread(() -> decrementSynchronized());
+		x = 0;
+		Thread t1 = new Thread(this::incrementSynchronized);
+		Thread t2 = new Thread(this::decrementSynchronized);
 		t1.start();
 		t2.start();
 		t1.join();
 		t2.join();
-		assertEquals(0, x);
+		assertEquals(x, 0);
 	}
 
 	private void incrementSynchronized() {
@@ -95,8 +98,8 @@ public class ThreadTest {
 	 */
 	@Test
 	public void testWaitNotify() throws InterruptedException {
-		Thread t1 = new Thread(() -> incrementWait());
-		Thread t2 = new Thread(() -> decrementWait());
+		Thread t1 = new Thread(this::incrementWait);
+		Thread t2 = new Thread(this::decrementWait);
 		t1.start();
 		t2.start();
 		t1.join();
@@ -105,7 +108,7 @@ public class ThreadTest {
 
 	private synchronized void incrementWait() {
 		for (int i = 0; i < ITERATIONS; i++) {
-			assertEquals(0, x);
+			assertEquals(x, 0);
 			x++;
 			notify();
 			try {
@@ -119,7 +122,7 @@ public class ThreadTest {
 
 	private synchronized void decrementWait() {
 		for (int i = 0; i < ITERATIONS; i++) {
-			assertEquals(1, x);
+			assertEquals(x, 1);
 			x--;
 			notify();
 			try {
@@ -136,7 +139,7 @@ public class ThreadTest {
 	 */
 	@Test
 	public void testInterrupt() {
-		Thread t = new Thread(() -> min2max());
+		Thread t = new Thread(this::min2max);
 		t.start();
 		try {
 			t.join(10);
@@ -159,7 +162,7 @@ public class ThreadTest {
 	}
 
 	private void min2max() {
-		for (int i = Integer.MIN_VALUE; i <= Integer.MAX_VALUE; i++) {
+		for (int i = Integer.MIN_VALUE; i < Integer.MAX_VALUE; i++) {
 			if (Thread.interrupted()) {
 				interrupted = true;
 				break;
@@ -181,16 +184,17 @@ public class ThreadTest {
 	 */
 	@Test
 	public void testDeadLock() {
+		int timeout = 100;
 		Person p1 = new Person();
 		Person p2 = new Person();
-		Thread t1 = new Thread(() -> p1.addFriendSync(p2));
-		Thread t2 = new Thread(() -> p2.addFriendSync(p1));
+		Thread t1 = new Thread(() -> p1.addFriendSync(p2, timeout));
+		Thread t2 = new Thread(() -> p2.addFriendSync(p1, timeout));
 		t1.start();
 		t2.start();
 		try {
-			t1.join(50);
+			t1.join(timeout);
 			assertTrue(t1.isAlive());
-			t2.join(50);
+			t2.join(timeout);
 			assertTrue(t2.isAlive());
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -209,11 +213,12 @@ public class ThreadTest {
 	 */
 	@Test
 	public void testReentrantLock() {
+		int timeout = 100;
 		Person p1 = new Person();
 		Person p2 = new Person();
 		while (true) {
-			Thread t1 = new Thread(() -> p1.addFriendReentrant(p2));
-			Thread t2 = new Thread(() -> p2.addFriendReentrant(p1));
+			Thread t1 = new Thread(() -> p1.addFriendReentrant(p2, timeout));
+			Thread t2 = new Thread(() -> p2.addFriendReentrant(p1, timeout));
 			t1.start();
 			t2.start();
 			try {
@@ -234,25 +239,25 @@ public class ThreadTest {
 
 	private static class Person {
 
-		private ReentrantLock lock;
-		private Set<Person> friends;
+		private final ReentrantLock lock;
+		private final Set<Person> friends;
 
 		public Person() {
 			friends = new HashSet<>();
 			lock = new ReentrantLock();
 		}
 
-		public void addFriendSync(Person friend) {
+		public void addFriendSync(Person friend, int timeout) {
 			assertFalse(Thread.holdsLock(this));
-			synchronized(this) {
+			synchronized (this) {
 				assertTrue(Thread.holdsLock(this));
 				try {
-					Thread.sleep(ThreadLocalRandom.current().nextLong(10));
+					Thread.sleep(timeout / 2 + ThreadLocalRandom.current().nextLong(timeout / 2));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 				assertFalse(Thread.holdsLock(friend));
-				synchronized(friend) {
+				synchronized (friend) {
 					assertTrue(Thread.holdsLock(friend));
 
 					this.friends.add(friend);
@@ -263,10 +268,10 @@ public class ThreadTest {
 			assertFalse(Thread.holdsLock(this));
 		}
 
-		public void addFriendReentrant(Person friend) {
+		public void addFriendReentrant(Person friend, int timeout) {
 			boolean meLocked = this.lock.tryLock();
 			try {
-				Thread.sleep(ThreadLocalRandom.current().nextLong(10));
+				Thread.sleep(timeout / 2 + ThreadLocalRandom.current().nextLong(timeout / 2));
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

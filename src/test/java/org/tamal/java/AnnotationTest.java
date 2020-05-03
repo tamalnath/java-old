@@ -1,6 +1,6 @@
 package org.tamal.java;
 
-import static org.junit.Assert.assertEquals;
+import org.testng.annotations.Test;
 
 import java.lang.reflect.AnnotatedArrayType;
 import java.lang.reflect.AnnotatedParameterizedType;
@@ -9,50 +9,46 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.junit.Test;
+import static org.testng.Assert.assertEquals;
 
 /**
  * This test suite demonstrates the usage of Annotation.
+ *
  * @author Tamal Kanti Nath
  */
 @Foo("class")
 public class AnnotationTest {
 
-	private @Foo("i1") @Foo("i2") int i;
-	private @Foo("a1") int @Foo("a2") [] @Foo("a3") [] @Foo("a4") [] @Foo("a5") [] array; // annotates array
-	private @Foo("l1") List<@Foo("l2") List<@Foo("l3") List<@Foo("l4") String>>> list; // annotates a list
+	private final @Foo("i1") @Foo("i2") int i;
+	private final @Foo("a1") int @Foo("a2") [] @Foo("a3") [] array = null; // annotates array
+	private final @Foo("l1") List<@Foo("l2") List<@Foo("l3") String>> list = null; // annotates a list
 
-	/**
-	 * Initialize test.
-	 */
 	@Foo("constructor")
 	public AnnotationTest() {
-		// Empty
+		i = -1;
 	}
 
 	@Foo("method")
 	private void method(@Foo("param") int param) throws @Foo("exception") Exception {
-		i = param;
+		throw new Exception();
 	}
 
 	/**
 	 * This test demonstrates the usage of class annotations.
-	 * @throws SecurityException should not happen
 	 */
 	@Test
 	public void testClassAnnotation() {
 		Foo foo = getClass().getAnnotation(Foo.class);
-		assertEquals("class", foo.value()[0]);
+		assertEquals(foo.value()[0], "class");
 	}
 
 	/**
 	 * This test demonstrates the usage of annotation annotations.
 	 */
 	@Test
-	@SuppressWarnings("static-method")
 	public void testAnnotationAnnotation() {
-		Foo foo = FooList.class.getAnnotation(Foo.class);
-		assertEquals("annotation", foo.value()[0]);
+		Foo foo = Foo.class.getAnnotation(Foo.class);
+		assertEquals(foo.value()[0], "annotation");
 	}
 
 	/**
@@ -61,7 +57,7 @@ public class AnnotationTest {
 	@Test
 	public void testPackageAnnotation() {
 		Foo foo = getClass().getPackage().getAnnotation(Foo.class);
-		assertEquals("package", foo.value()[0]);
+		assertEquals(foo.value()[0], "package");
 	}
 
 	/**
@@ -72,7 +68,7 @@ public class AnnotationTest {
 	@Test
 	public void testConstructorAnnotation() throws NoSuchMethodException, SecurityException {
 		Foo foo = getClass().getConstructor().getDeclaredAnnotation(Foo.class);
-		assertEquals("constructor", foo.value()[0]);
+		assertEquals(foo.value()[0], "constructor");
 	}
 
 	/**
@@ -84,13 +80,13 @@ public class AnnotationTest {
 	public void testMethodAnnotation() throws NoSuchMethodException, SecurityException {
 		Method m = getClass().getDeclaredMethod("method", int.class);
 		Foo foo = m.getDeclaredAnnotation(Foo.class);
-		assertEquals("method", foo.value()[0]);
+		assertEquals(foo.value()[0], "method");
 
 		foo = m.getParameters()[0].getDeclaredAnnotation(Foo.class);
-		assertEquals("param", foo.value()[0]);
+		assertEquals(foo.value()[0], "param");
 
 		foo = m.getAnnotatedExceptionTypes()[0].getAnnotation(Foo.class);
-		assertEquals("exception", foo.value()[0]);
+		assertEquals(foo.value()[0], "exception");
 
 	}
 
@@ -102,8 +98,7 @@ public class AnnotationTest {
 	@Test
 	public void testRepeatableAnnotation() throws NoSuchFieldException, SecurityException {
 		Field f = getClass().getDeclaredField("i");
-		FooList fooList = f.getAnnotation(FooList.class);
-		Foo[] foos = fooList.value();
+		Foo[] foos = f.getAnnotation(Foo.List.class).value();
 		assertEquals(2, foos.length);
 		assertEquals("i1", foos[0].value()[0]);
 		assertEquals("i2", foos[1].value()[0]);
@@ -123,19 +118,13 @@ public class AnnotationTest {
 	public void testArrayAnnotation() throws NoSuchFieldException, SecurityException {
 		Field f = getClass().getDeclaredField("array");
 		Foo foo = f.getDeclaredAnnotation(Foo.class);
-		assertEquals("a1", foo.value()[0]);
+		assertEquals(foo.value()[0], "a1");
 		AnnotatedArrayType aat = (AnnotatedArrayType) f.getAnnotatedType();
 		foo = aat.getAnnotation(Foo.class);
-		assertEquals("a2", foo.value()[0]);
+		assertEquals(foo.value()[0], "a2");
 		aat = (AnnotatedArrayType) aat.getAnnotatedGenericComponentType();
 		foo = aat.getDeclaredAnnotation(Foo.class);
-		assertEquals("a3", foo.value()[0]);
-		aat = (AnnotatedArrayType) aat.getAnnotatedGenericComponentType();
-		foo = aat.getDeclaredAnnotation(Foo.class);
-		assertEquals("a4", foo.value()[0]);
-		aat = (AnnotatedArrayType) aat.getAnnotatedGenericComponentType();
-		foo = aat.getDeclaredAnnotation(Foo.class);
-		assertEquals("a5", foo.value()[0]);
+		assertEquals(foo.value()[0], "a3");
 	}
 
 	/**
@@ -147,19 +136,16 @@ public class AnnotationTest {
 	public void testTypeAnnotation() throws NoSuchFieldException, SecurityException {
 		Field f = getClass().getDeclaredField("list");
 		Foo foo = f.getDeclaredAnnotation(Foo.class);
-		assertEquals("l1", foo.value()[0]);
+		assertEquals(foo.value()[0], "l1");
 		AnnotatedParameterizedType apt = (AnnotatedParameterizedType) f.getAnnotatedType();
 		foo = apt.getDeclaredAnnotation(Foo.class);
-		assertEquals("l1", foo.value()[0]);
+		assertEquals(foo.value()[0], "l1");
 		apt = (AnnotatedParameterizedType) apt.getAnnotatedActualTypeArguments()[0];
 		foo = apt.getDeclaredAnnotation(Foo.class);
-		assertEquals("l2", foo.value()[0]);
-		apt = (AnnotatedParameterizedType) apt.getAnnotatedActualTypeArguments()[0];
-		foo = apt.getDeclaredAnnotation(Foo.class);
-		assertEquals("l3", foo.value()[0]);
+		assertEquals(foo.value()[0], "l2");
 		AnnotatedType at = apt.getAnnotatedActualTypeArguments()[0];
 		foo = at.getDeclaredAnnotation(Foo.class);
-		assertEquals("l4", foo.value()[0]);
+		assertEquals(foo.value()[0], "l3");
 	}
 
 }

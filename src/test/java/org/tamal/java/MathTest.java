@@ -1,17 +1,17 @@
 package org.tamal.java;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
-import org.junit.Test;
+import org.testng.annotations.Test;
+
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotEquals;
+import static org.testng.AssertJUnit.assertFalse;
+import static org.testng.AssertJUnit.assertNotNull;
+import static org.testng.AssertJUnit.assertTrue;
 
 /**
  * @author Tamal Kanti Nath
  */
-@SuppressWarnings("static-method")
 public class MathTest {
 
 	/**
@@ -21,17 +21,17 @@ public class MathTest {
 	public void testLeftToRight() {
 		int i;
 		int j = (i = 10) * i;
-		assertEquals(10, i);
-		assertEquals(10 * 10, j);
+		assertEquals(i, 10);
+		assertEquals(j, 10 * 10);
 
 		i = 10;
 		j = i = 2 * i;
-		assertEquals(i, j);
+		assertEquals(j, i);
 
 		i = 10;
 		j = i + (i = 1);
-		assertEquals(1, i);
-		assertEquals(11, j);
+		assertEquals(i, 1);
+		assertEquals(j, 11);
 
 		i = 10;
 		i += i = 1;

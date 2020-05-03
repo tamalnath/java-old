@@ -1,15 +1,15 @@
 package org.tamal.java;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import org.testng.annotations.Test;
 
 import java.util.Arrays;
 import java.util.Date;
 
-import org.junit.Test;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
+import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertNotSame;
+import static org.testng.AssertJUnit.assertSame;
 
 /**
  * @author Tamal Kanti Nath
@@ -30,9 +30,10 @@ public class CoreJavaTest {
 
 	/**
 	 * This test proves that objects that don't implement {@link Cloneable} interface will throw {@link CloneNotSupportedException}.
+	 *
 	 * @throws CloneNotSupportedException as NotClonable do not implement {@link Cloneable} interface
 	 */
-	@Test(expected = CloneNotSupportedException.class)
+	@Test(expectedExceptions = CloneNotSupportedException.class)
 	public void testCloneNotSupportedException() throws CloneNotSupportedException {
 		NotClonable nc1 = new NotClonable();
 		nc1.clone();
@@ -42,7 +43,7 @@ public class CoreJavaTest {
 	 * This method proves instanceof operator yields false for null.
 	 */
 	@Test
-	@SuppressWarnings({ "cast", "null" })
+	@SuppressWarnings({"cast", "null"})
 	public void testInstanceof() {
 		String s = null;
 		assertFalse(s instanceof Object);
@@ -78,7 +79,7 @@ public class CoreJavaTest {
 		String s1 = "string";
 		String s2 = "str" + "ing";
 		assertSame("Expected same object", s1, s2);
-		String ing = new String("ing");
+		String ing = "ing";
 		s1 = "str" + ing;
 		s2 = "str" + ing;
 		assertNotSame("Did not expect same object", s1, s2);

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="RemoteRepositoriesConfiguration">
+    <remote-repository>
+      <option name="id" value="build-squid" />
+      <option name="name" value="build-squid" />
+      <option name="url" value="http://build-squid.eng.vmware.com/nexus/content/groups/repo" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="vrops-release" />
+      <option name="name" value="vrops-release" />
+      <option name="url" value="http://build-artifactory.eng.vmware.com/artifactory/vrops-release" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Maven Central repository" />
+      <option name="url" value="https://repo1.maven.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="central" />
+      <option name="url" value="https://repo.maven.apache.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="osvc-release-local" />
+      <option name="name" value="osvc-release-local" />
+      <option name="url" value="http://build-artifactory.eng.vmware.com/artifactory/osvc-release-local" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="vrbc-cloud-comparison-release" />
+      <option name="name" value="vrbc-cloud-comparison-release" />
+      <option name="url" value="https://build-artifactory.eng.vmware.com/artifactory/vrbc-cloud-comparison-release" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="jboss.community" />
+      <option name="name" value="JBoss Community repository" />
+      <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
+    </remote-repository>
+  </component>
+</project>

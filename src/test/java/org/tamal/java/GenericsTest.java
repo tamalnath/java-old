@@ -1,7 +1,7 @@
 package org.tamal.java;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+
+import org.testng.annotations.Test;
 
 import java.io.Externalizable;
 import java.io.Serializable;
@@ -16,21 +16,22 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Test;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 /**
  * @author Tamal Kanti Nath
  */
 public class GenericsTest {
 
-	List<Number> number;
+	List<Number> numbers;
 	List<? extends Number> extendsNumber;
 	List<? super Number> superNumber;
 
 	TypedClass<?, ?> t = new TypedClass<>();
 
 	/**
-	 * 
+	 *
 	 */
 	@Test
 	public void testGenerics() {
@@ -75,8 +76,8 @@ public class GenericsTest {
 	 */
 	@Test
 	public void testWildcardType() {
-		number = new ArrayList<>(); // new ArrayList<Number>();
-		// number = new ArrayList<Integer>(); // Type mismatch
+		numbers = new ArrayList<>(); // new ArrayList<Number>();
+		// numbers = new ArrayList<Integer>(); // Type mismatch
 
 		extendsNumber = new ArrayList<>(); // new ArrayList<Number>();
 		extendsNumber = new ArrayList<Integer>();
@@ -86,18 +87,18 @@ public class GenericsTest {
 		// superNumber = new ArrayList<Integer>(); // Type mismatch
 		superNumber = new ArrayList<Object>();
 
-		number.add(0);
+		numbers.add(0);
 		// extendsNumber.add(0); // argument mismatch
 		superNumber.add(0);
 
-		number = Arrays.asList(BigDecimal.ZERO);
-		extendsNumber = Arrays.asList(BigDecimal.ZERO, BigInteger.ZERO);
-		superNumber = Arrays.asList(BigDecimal.ZERO);
+		numbers = Arrays.asList(BigDecimal.ZERO, BigInteger.ONE);
+		extendsNumber = Arrays.asList(BigDecimal.ZERO, BigInteger.ONE);
+		superNumber = Arrays.asList(BigDecimal.ZERO, BigInteger.ONE);
 
 		Collections.copy(superNumber, extendsNumber);
-		Collections.copy(superNumber, number);
-		Collections.copy(number, extendsNumber);
-		Collections.copy(number, extendsNumber);
+		Collections.copy(superNumber, numbers);
+		Collections.copy(numbers, extendsNumber);
+		Collections.copy(numbers, extendsNumber);
 	}
-	
+
 }
