@@ -11,7 +11,7 @@ import static org.testng.Assert.assertEquals;
 /**
  * @author Tamal Kanti Nath
  */
-@SuppressWarnings({"static-method", "unused"})
+@SuppressWarnings({"unused"})
 public class OverloadingTest {
 
 	/**
@@ -20,12 +20,12 @@ public class OverloadingTest {
 	@Test
 	public void byteOverloading() {
 		byte n = Byte.MAX_VALUE;
-		assertEquals("byte", overloadByte(n));
-		assertEquals("short", overloadShort(n));
-		assertEquals("int", overloadInt(n));
-		assertEquals("long", overloadLong(n));
-		assertEquals("float", overloadFloat(n));
-		assertEquals("double", overloadDouble(n));
+		assertEquals(overloadByte(n), "byte");
+		assertEquals(overloadShort(n), "short");
+		assertEquals(overloadInt(n), "int");
+		assertEquals(overloadLong(n), "long");
+		assertEquals(overloadFloat(n), "float");
+		assertEquals(overloadDouble(n), "double");
 	}
 
 	/**
@@ -34,11 +34,11 @@ public class OverloadingTest {
 	@Test
 	public void shortOverloading() {
 		short n = Short.MAX_VALUE;
-		assertEquals("short", overloadShort(n));
-		assertEquals("int", overloadInt(n));
-		assertEquals("long", overloadLong(n));
-		assertEquals("float", overloadFloat(n));
-		assertEquals("double", overloadDouble(n));
+		assertEquals(overloadShort(n), "short");
+		assertEquals(overloadInt(n), "int");
+		assertEquals(overloadLong(n), "long");
+		assertEquals(overloadFloat(n), "float");
+		assertEquals(overloadDouble(n), "double");
 	}
 
 	/**
@@ -47,10 +47,10 @@ public class OverloadingTest {
 	@Test
 	public void intOverloading() {
 		int n = Integer.MAX_VALUE;
-		assertEquals("int", overloadInt(n));
-		assertEquals("long", overloadLong(n));
-		assertEquals("float", overloadFloat(n));
-		assertEquals("double", overloadDouble(n));
+		assertEquals(overloadInt(n), "int");
+		assertEquals(overloadLong(n), "long");
+		assertEquals(overloadFloat(n), "float");
+		assertEquals(overloadDouble(n), "double");
 	}
 
 	/**
@@ -59,9 +59,9 @@ public class OverloadingTest {
 	@Test
 	public void longOverloading() {
 		long n = Long.MAX_VALUE;
-		assertEquals("long", overloadLong(n));
-		assertEquals("float", overloadFloat(n));
-		assertEquals("double", overloadDouble(n));
+		assertEquals(overloadLong(n), "long");
+		assertEquals(overloadFloat(n), "float");
+		assertEquals(overloadDouble(n), "double");
 	}
 
 	/**
@@ -70,8 +70,8 @@ public class OverloadingTest {
 	@Test
 	public void floatOverloading() {
 		float n = Float.MAX_VALUE;
-		assertEquals("float", overloadFloat(n));
-		assertEquals("double", overloadDouble(n));
+		assertEquals(overloadFloat(n), "float");
+		assertEquals(overloadDouble(n), "double");
 	}
 
 	/**
@@ -80,7 +80,7 @@ public class OverloadingTest {
 	@Test
 	public void doubleOverloading() {
 		double n = Double.MAX_VALUE;
-		assertEquals("double", overloadDouble(n));
+		assertEquals(overloadDouble(n), "double");
 	}
 
 	private static String overloadByte(byte n) {
@@ -174,10 +174,10 @@ public class OverloadingTest {
 	@Test
 	public void wideningWrapperVarargs() {
 		int n = Integer.MAX_VALUE;
-		assertEquals("long", overloadWidening(n));
-		assertEquals("Integer", overloadWrapper(n));
-		assertEquals("int[]", overloadVarargs(n));
-		assertEquals("long[]", overloadWideningVarargs(n));
+		assertEquals(overloadWidening(n), "long");
+		assertEquals(overloadWrapper(n), "Integer");
+		assertEquals(overloadVarargs(n), "int[]");
+		assertEquals(overloadWideningVarargs(n), "long[]");
 	}
 
 	private static String overloadWidening(long n) {
@@ -225,9 +225,10 @@ public class OverloadingTest {
 	 */
 	@Test
 	public void overloadingHierarchy() {
-		assertEquals("Integer", overloadInteger(0));
-		assertEquals("Number", overloadNumber(0));
-		assertEquals("Object", overloadObject(0));
+		int n = Integer.MAX_VALUE;
+		assertEquals(overloadInteger(n), "Integer");
+		assertEquals(overloadNumber(n), "Number");
+		assertEquals(overloadObject(n), "Object");
 	}
 
 	private static String overloadInteger(Integer n) {
@@ -264,17 +265,17 @@ public class OverloadingTest {
 		 * Integer implements both Serializable (by extending Number) and Comparable interface.
 		 * It creates ambiguity as those interfaces have same precedence.
 		 */
-		// assertEquals("Serializable or Comparable", overloadSerializableComparable(0));
-		assertEquals("Serializable", overloadSerializableComparable((Serializable) 0));
-		assertEquals("Comparable", overloadSerializableComparable((Comparable<Integer>) 0));
+		// assertEquals(overloadSerializableComparable(0), "Serializable or Comparable");
+		assertEquals(overloadSerializableComparable((Serializable) 0), "Serializable");
+		assertEquals(overloadSerializableComparable((Comparable<Integer>) 0), "Comparable");
 
 		/*
 		 * Integer varargs and int varargs are ambiguous.
 		 */
-		// assertEquals("int[] or Integer[]", overloadIntInteger(0));
-		// assertEquals("int[] or Integer[]", overloadIntInteger(Integer.valueOf(0)));
-		assertEquals("int[]", overloadIntInteger(new int[] {0, 1}));
-		assertEquals("Integer[]", overloadIntInteger(new Integer[] {0, 1}));
+		// assertEquals(overloadIntInteger(0), "int[] or Integer[]");
+		// assertEquals(overloadIntInteger(Integer.valueOf(0)), "int[] or Integer[]");
+		assertEquals(overloadIntInteger(new int[] {0, 1}), "int[]");
+		assertEquals(overloadIntInteger(new Integer[] {0, 1}), "Integer[]");
 	}
 
 	private static String overloadSerializableComparable(Serializable i) {

@@ -11,15 +11,12 @@ import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 /**
+ * This class demonstrates the usage of generics.
  * @author Tamal Kanti Nath
  */
 public class GenericsTest {
@@ -31,7 +28,7 @@ public class GenericsTest {
 	TypedClass<?, ?> t = new TypedClass<>();
 
 	/**
-	 *
+	 * This test demonstrates type variables, type, parameterized types, wildcard types.
 	 */
 	@Test
 	public void testGenerics() {
@@ -65,25 +62,29 @@ public class GenericsTest {
 		assertEquals(1, types.length);
 		assertEquals(Object.class, types[0]);
 
+		// to avoid warnings
+		assertNull(t.i1);
+		assertNull(t.i2);
 	}
 
-	class TypedClass<I1 extends Serializable & Externalizable, I2 extends Comparable<? super Number>> {
-		// Empty
+	static class TypedClass<I1 extends Serializable & Externalizable, I2 extends Comparable<? super Number>> {
+		I1 i1 = null;
+		I2 i2 = null;
 	}
 
 	/**
-	 * This test proves:
+	 * This test demonstrates wildcard generics.
 	 */
 	@Test
 	public void testWildcardType() {
-		numbers = new ArrayList<>(); // new ArrayList<Number>();
+		numbers = new ArrayList<>();
 		// numbers = new ArrayList<Integer>(); // Type mismatch
 
-		extendsNumber = new ArrayList<>(); // new ArrayList<Number>();
+		extendsNumber = new ArrayList<>();
 		extendsNumber = new ArrayList<Integer>();
 		// extendsNumber = new ArrayList<Object>(); // Type mismatch
 
-		superNumber = new ArrayList<>(); // new ArrayList<Number>();
+		superNumber = new ArrayList<>();
 		// superNumber = new ArrayList<Integer>(); // Type mismatch
 		superNumber = new ArrayList<Object>();
 

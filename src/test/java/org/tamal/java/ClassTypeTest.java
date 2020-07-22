@@ -5,13 +5,13 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.assertEquals;
 
 /**
- * This test suite demonstrates the usage of static nested class, inner class, local class and anonymous class.
+ * This test demonstrates the usage of static nested class, inner class, local class and anonymous class.
  *
  * @author Tamal Kanti Nath
  */
 public class ClassTypeTest {
 
-    private final String name = "InheritanceTest";
+    private final String name = getClass().getSimpleName();
 
     /**
      * This method demonstrates the use of static nested class. It also proves
@@ -19,7 +19,7 @@ public class ClassTypeTest {
      * accessed from static nested class.
      */
     @Test
-    public void testStaticNestedClass() {
+    public void testStaticClass() {
         ClassTypeTest.Static1.Static2.Static3.checkAccess();
     }
 
@@ -29,25 +29,25 @@ public class ClassTypeTest {
     @Test
     public void testLocalClass() {
         class Local1 {
-            final String name = "Local1";
+            final String name = getClass().getSimpleName();
 
             public void method(String name1) {
                 class Local2 {
-                    final String name = "Local2";
+                    final String name = getClass().getSimpleName();
 
                     public void method(String name2) {
                         class Local3 {
-                            final String name = "Local3";
+                            final String name = getClass().getSimpleName();
 
                             public void method(String name3) {
-                                assertEquals("Local3", name3);
-                                assertEquals("Local2", name2);
-                                assertEquals("Local1", name1);
+                                assertEquals(name3, "Local3");
+                                assertEquals(name2, "Local2");
+                                assertEquals(name1, "Local1");
 
-                                assertEquals("Local3", Local3.this.name);
-                                assertEquals("Local2", Local2.this.name);
-                                assertEquals("Local1", Local1.this.name);
-                                assertEquals("InheritanceTest", ClassTypeTest.this.name);
+                                assertEquals(Local3.this.name, "Local3");
+                                assertEquals(Local2.this.name, "Local2");
+                                assertEquals(Local1.this.name, "Local1");
+                                assertEquals(ClassTypeTest.this.name, "ClassTypeTest");
                             }
                         }
                         Local3 local = new Local3();
@@ -77,31 +77,27 @@ public class ClassTypeTest {
      */
     @Test
     public void testAnonymousClass() {
-        int i1 = 1;
+        Class<? extends ClassTypeTest> var1 = getClass();
         Runnable r = new Runnable() {
-            private final int j1 = 1;
+            private final Class<? extends Runnable> field1 = getClass();
 
             @Override
             public void run() {
-                int i2 = 2;
+                Class<? extends Runnable> var2 = getClass();
                 Runnable r = new Runnable() {
-                    private final int j2 = 2;
+                    private final Class<? extends Runnable> field2 = getClass();
 
                     @Override
                     public void run() {
-                        int i3 = 3;
+                        Class<? extends Runnable> var3 = getClass();
                         Runnable r = new Runnable() {
-                            private final int j3 = 3;
+                            private final Class<? extends Runnable> field3 = getClass();
 
                             @Override
                             public void run() {
-                                assertEquals(1, i1);
-                                assertEquals(2, i2);
-                                assertEquals(3, i3);
-
-                                assertEquals(1, j1);
-                                assertEquals(2, j2);
-                                assertEquals(3, j3);
+                                assertEquals(field3.getEnclosingClass(), var3);
+                                assertEquals(field2.getEnclosingClass(), var2);
+                                assertEquals(field1.getEnclosingClass(), var1);
                             }
                         };
                         r.run();
@@ -113,39 +109,23 @@ public class ClassTypeTest {
         r.run();
     }
 
-    private interface Interface {
-        int value = 1;
-    }
+    private static class Static1 {
+        private static final String name = Static1.class.getSimpleName();
 
-    private static class Static1 implements Interface {
-        private static final String name = "Static1";
+        private static class Static2 {
 
-        private interface Interface {
-            int value = 2;
-        }
+            private static final String name = Static2.class.getSimpleName();
 
-        private static class Static2 implements Interface {
+            private static class Static3 {
 
-            private static final String name = "Static2";
-
-            private interface Interface {
-                int value = 3;
-            }
-
-            private static class Static3 implements Interface {
-                private static final String name = "Static3";
+                private static final String name = Static3.class.getSimpleName();
 
                 private static void checkAccess() {
-                    // non-static variable name cannot be referenced from a static context
-                    // assertEquals("InheritanceTest", InheritanceTest.name);
+                    assertEquals(name, "Static3");
 
-                    assertEquals("Static3", Static3.name);
-                    assertEquals("Static2", Static2.name);
-                    assertEquals("Static1", Static1.name);
-
-                    assertEquals(3, Static3.value);
-                    assertEquals(2, Static2.value);
-                    assertEquals(1, Static1.value);
+                    assertEquals(Static3.name, "Static3");
+                    assertEquals(Static2.name, "Static2");
+                    assertEquals(Static1.name, "Static1");
                 }
             }
         }
@@ -153,21 +133,19 @@ public class ClassTypeTest {
 
     class Inner1 {
 
-        private final String name = "Inner1";
+        private final String name = getClass().getSimpleName();
 
         class Inner2 {
-            private final String name = "Inner2";
+            private final String name = getClass().getSimpleName();
 
             class Inner3 {
-                private final String name = "Inner3";
+                private final String name = getClass().getSimpleName();
 
                 public void qualifiedThis() {
-                    String name = "local";
-                    assertEquals("local", name);
                     assertEquals("Inner3", this.name);
                     assertEquals("Inner2", Inner2.this.name);
                     assertEquals("Inner1", Inner1.this.name);
-                    assertEquals("InheritanceTest", ClassTypeTest.this.name);
+                    assertEquals("ClassTypeTest", ClassTypeTest.this.name);
                 }
             }
         }

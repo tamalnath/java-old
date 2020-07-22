@@ -1,17 +1,18 @@
 package org.tamal.java;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
 import java.util.Date;
 
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertNotSame;
 import static org.testng.AssertJUnit.assertSame;
 
 /**
+ * Miscellaneous tests on core java.
  * @author Tamal Kanti Nath
  */
 @SuppressWarnings("static-method")
@@ -24,18 +25,18 @@ public class CoreJavaTest {
 	public void testClone() {
 		Date date1 = new Date();
 		Date date2 = (Date) date1.clone();
-		assertTrue(date1.equals(date2));
-		assertFalse(date1 == date2);
+		assertEquals(date1, date2);
+		assertNotSame(date1, date2);
 	}
 
 	/**
 	 * This test proves that objects that don't implement {@link Cloneable} interface will throw {@link CloneNotSupportedException}.
 	 *
-	 * @throws CloneNotSupportedException as NotClonable do not implement {@link Cloneable} interface
+	 * @throws CloneNotSupportedException as NotCloneable do not implement {@link Cloneable} interface
 	 */
 	@Test(expectedExceptions = CloneNotSupportedException.class)
 	public void testCloneNotSupportedException() throws CloneNotSupportedException {
-		NotClonable nc1 = new NotClonable();
+		NotCloneable nc1 = new NotCloneable();
 		nc1.clone();
 	}
 
@@ -43,8 +44,7 @@ public class CoreJavaTest {
 	 * This method proves instanceof operator yields false for null.
 	 */
 	@Test
-	@SuppressWarnings({"cast", "null"})
-	public void testInstanceof() {
+	public void testInstanceOf() {
 		String s = null;
 		assertFalse(s instanceof Object);
 		s = "";
@@ -111,7 +111,7 @@ public class CoreJavaTest {
 		// Object 1number, class, null, false;
 
 		// Below are the valid numeric literals
-		int[] ints = { -111, -0x1f, -017, -0b10 };
+		int[] integers = { -111, -0x1f, -017, -0b10 };
 		float[] floats = { -11.11f, -11E-11f, 11.f, .11f };
 		double[] doubles = { -1_1.1_1, -1_1E-1_1 };
 		char[] chars = { 'a', '\t', '\\', '\'', '\uFFFF', '\377', '™' };
@@ -148,9 +148,9 @@ public class CoreJavaTest {
 		// Empty
 	}
 
-	private class NotClonable {
+	private static class NotCloneable {
 
-		public NotClonable() {
+		public NotCloneable() {
 			// Empty
 		}
 

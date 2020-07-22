@@ -7,68 +7,68 @@ import static org.testng.Assert.assertEquals;
 /**
  * @author Tamal Kanti Nath
  */
-@SuppressWarnings({ "static-method", "static-access", "hiding", "synthetic-access" })
+@SuppressWarnings({ "static-access" })
 public class InheritanceTest {
 
 	/**
-	 * This test proves that a static methods, static class variables and class
-	 * variables are resolved at compile time. But a non-static method is
+	 * This test proves that a static methods and static fields are resolved at
+	 * compile time. But a non-static methods and non-static fields are
 	 * resolved at runtime. It also proves that static method can be called by
 	 * null instance variables.
 	 */
 	@Test
 	public void compileTimeVsRuntime() {
-		Class1 x = null;
-		Class2 y = null;
-		Class3 z = null;
+		Class1 class1 = null;
+		Class2 class2 = null;
+		Class3 class3 = null;
 
-		assertEquals("Class1.staticMethod", x.staticMethod());
-		assertEquals("Class2.staticMethod", y.staticMethod());
-		assertEquals("Class3.staticMethod", z.staticMethod());
+		assertEquals(class1.staticMethod(), "Class1");
+		assertEquals(class2.staticMethod(), "Class2");
+		assertEquals(class3.staticMethod(), "Class3");
 
-		assertEquals("Class1.staticVariable", x.staticVariable);
-		assertEquals("Class2.staticVariable", y.staticVariable);
-		assertEquals("Class3.staticVariable", z.staticVariable);
+		assertEquals(class1.staticVariable, "Class1");
+		assertEquals(class2.staticVariable, "Class2");
+		assertEquals(class3.staticVariable, "Class3");
 
-		x = new Class1();
-		y = new Class2();
-		z = new Class3();
+		class1 = new Class1();
+		class2 = new Class2();
+		class3 = new Class3();
 
-		assertEquals("Class1.variable", x.variable);
-		assertEquals("Class2.variable", y.variable);
-		assertEquals("Class3.variable", z.variable);
+		assertEquals(class1.variable, "Class1");
+		assertEquals(class2.variable, "Class2");
+		assertEquals(class3.variable, "Class3");
 
-		assertEquals("Class1.method", x.method());
-		assertEquals("Class2.method", y.method());
-		assertEquals("Class3.method", z.method());
+		assertEquals(class1.method(), "Class1");
+		assertEquals(class2.method(), "Class2");
+		assertEquals(class3.method(), "Class3");
 
-		assertEquals("Class1.method", ((Interface1) x).method());
-		assertEquals("Class2.method", ((Interface1) y).method());
-		assertEquals("Class3.method", ((Interface1) z).method());
+		assertEquals(((Interface1) class1).method(), "Class1");
+		assertEquals(((Interface1) class2).method(), "Class2");
+		assertEquals(((Interface1) class3).method(), "Class3");
 
-		assertEquals("Interface1.variable", ((Interface1) x).variable);
-		assertEquals("Interface1.variable", ((Interface1) y).variable);
-		assertEquals("Interface1.variable", ((Interface1) z).variable);
+		assertEquals(((Interface1) class1).variable, "Interface1.variable");
+		assertEquals(((Interface1) class2).variable, "Interface1.variable");
+		assertEquals(((Interface1) class3).variable, "Interface1.variable");
 
-		x = new Class3();
-		y = new Class3();
-		z = new Class3();
+		class1 = new Class3();
+		class2 = new Class3();
+		class3 = new Class3();
 
-		assertEquals("Class1.variable", x.variable);
-		assertEquals("Class2.variable", y.variable);
-		assertEquals("Class3.variable", z.variable);
+		assertEquals(class1.variable, "Class3");
+		assertEquals(class2.variable, "Class3");
+		assertEquals(class3.variable, "Class3");
 
-		assertEquals("Class3.method", x.method());
-		assertEquals("Class3.method", y.method());
-		assertEquals("Class3.method", z.method());
+		assertEquals(class1.method(), "Class3");
+		assertEquals(class2.method(), "Class3");
+		assertEquals(class3.method(), "Class3");
 
-		assertEquals("Class3.method", ((Interface2) x).method());
-		assertEquals("Class3.method", ((Interface2) y).method());
-		assertEquals("Class3.method", ((Interface2) z).method());
+		assertEquals(((Interface2) class1).method(), "Class3");
+		assertEquals(((Interface2) class2).method(), "Class3");
+		assertEquals(((Interface2) class3).method(), "Class3");
 
-		assertEquals("Interface2.variable", ((Interface2) x).variable);
-		assertEquals("Interface2.variable", ((Interface2) y).variable);
-		assertEquals("Interface2.variable", ((Interface2) z).variable);
+		assertEquals(((Interface2) class1).variable, "Interface2.variable");
+		assertEquals(((Interface2) class2).variable, "Interface2.variable");
+		assertEquals(((Interface2) class3).variable, "Interface2.variable");
 
 	}
 
@@ -87,8 +87,8 @@ public class InheritanceTest {
 	}
 
 	private static class Class1 implements Interface1, Interface2 {
-		static String staticVariable = "Class1.staticVariable";
-		String variable = "Class1.variable";
+		static String staticVariable = Class1.class.getSimpleName();
+		String variable = getClass().getSimpleName();
 
 		/**
 		 * Although this method is declared as a default method in both the
@@ -96,41 +96,41 @@ public class InheritanceTest {
 		 */
 		@Override
 		public String method() {
-			return "Class1.method";
+			return variable;
 		}
 
 		static String staticMethod() {
-			return "Class1.staticMethod";
+			return staticVariable;
 		}
 
 	}
 
 	private static class Class2 extends Class1 {
-		static String staticVariable = "Class2.staticVariable";
-		String variable = "Class2.variable";
+		static String staticVariable = Class2.class.getSimpleName();
+		String variable = getClass().getSimpleName();
 
 		@Override
 		public String method() {
-			return "Class2.method";
+			return variable;
 		}
 
 		static String staticMethod() {
-			return "Class2.staticMethod";
+			return staticVariable;
 		}
 
 	}
 
 	private static class Class3 extends Class2 {
-		static String staticVariable = "Class3.staticVariable";
-		String variable = "Class3.variable";
+		static String staticVariable = Class3.class.getSimpleName();
+		String variable = getClass().getSimpleName();
 
 		@Override
 		public String method() {
-			return "Class3.method";
+			return variable;
 		}
 
 		static String staticMethod() {
-			return "Class3.staticMethod";
+			return staticVariable;
 		}
 	}
 

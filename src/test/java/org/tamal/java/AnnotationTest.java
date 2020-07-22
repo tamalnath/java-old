@@ -30,7 +30,9 @@ public class AnnotationTest {
 
 	@Foo("method")
 	private void method(@Foo("param") int param) throws @Foo("exception") Exception {
-		throw new Exception();
+		if (param == i) {
+			throw new Exception();
+		}
 	}
 
 	/**

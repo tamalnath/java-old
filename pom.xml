@@ -18,7 +18,7 @@
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
-			<version>7.1.1</version>
+			<version>7.1.0</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -51,7 +51,7 @@
 				</plugin>
 				<plugin>
 					<artifactId>maven-site-plugin</artifactId>
-					<version>3.9.0</version>
+					<version>3.9.1</version>
 				</plugin>
 				<plugin>
 					<artifactId>maven-release-plugin</artifactId>
@@ -73,7 +73,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.0.0-M4</version>
+				<version>3.0.0-M5</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -90,6 +90,11 @@
 								<requireMavenVersion>
 									<version>3.6.0</version>
 								</requireMavenVersion>
+								<requireJavaVersion>
+									<version>1.8</version>
+								</requireJavaVersion>
+								<banDuplicatePomDependencyVersions/>
+								<dependencyConvergence/>
 							</rules>
 						</configuration>
 					</execution>
@@ -101,7 +106,7 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>3.0.0</version>
+				<version>3.1.0</version>
 			</plugin>
 			<plugin>
 				<artifactId>maven-changelog-plugin</artifactId>
@@ -137,7 +142,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-surefire-report-plugin</artifactId>
-				<version>3.0.0-M4</version>
+				<version>3.0.0-M5</version>
 			</plugin>
 			<plugin>
 				<artifactId>maven-dependency-plugin</artifactId>

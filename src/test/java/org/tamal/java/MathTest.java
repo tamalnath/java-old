@@ -10,10 +10,12 @@ import static org.testng.AssertJUnit.assertNotNull;
 import static org.testng.AssertJUnit.assertTrue;
 
 /**
+ * This class shows various mathematical operations.
  * @author Tamal Kanti Nath
  */
 public class MathTest {
 
+	private int ZERO = 0;
 	/**
 	 * This method proves expressions are evaluated in left-to-right order.
 	 */
@@ -35,15 +37,15 @@ public class MathTest {
 
 		i = 10;
 		i += i = 1;
-		assertEquals(11, i);
+		assertEquals(i, 11);
 
-		i = 10;
+		i = ZERO;
 		Exception e = null;
 		try {
-			j = (i / 0) / (i = 1);
+			j = (10 / i) / (i = 1);
 		} catch (ArithmeticException ae) {
 			e = ae;
-			assertEquals(10, i);
+			assertEquals(i, 0);
 		}
 		assertNotNull(e);
 
@@ -59,9 +61,11 @@ public class MathTest {
 	public void testUnary() {
 		int i = 10;
 		int j = i++ + ++i + i++ + ++i;
-		assertEquals(10 + 12 + 12 + 14, j);
+		assertEquals(i, 14);
+		assertEquals(j, 10 + 12 + 12 + 14);
 		j = --i - i-- - --i - i--;
-		assertEquals(13 - 13 - 11 - 11, j);
+		assertEquals(i, 10);
+		assertEquals(j, 13 - 13 - 11 - 11);
 	}
 
 	/**
@@ -71,10 +75,12 @@ public class MathTest {
 	public void testParameterEvaluationOrder() {
 		int i = 10;
 		String str = String.format("%d %d %d %d", i++, ++i, i++, ++i);
-		assertEquals("10 12 12 14", str);
+		assertEquals(i, 14);
+		assertEquals(str, "10 12 12 14");
 		i = 10;
 		str = String.format("%d %d %d %d", ++i, i++, ++i, i++);
-		assertEquals("11 11 13 13", str);
+		assertEquals(i, 14);
+		assertEquals(str, "11 11 13 13");
 	}
 
 	/**
@@ -87,10 +93,10 @@ public class MathTest {
 	public void testArrayEvaluationOrder() {
 		int[][] array = { { 0, 1 }, { 2, 3 } };
 		int i = 0;
-		assertEquals(array[0][1], array[i++][i++]);
-		assertEquals(array[1][0], array[--i][--i]);
+		assertEquals(array[i++][i++], array[0][1]);
+		assertEquals(array[--i][--i], array[1][0]);
 
-		assertEquals(3, array[1][ (array[1] = array[0])[1] ]);
+		assertEquals(array[1][ (array[1] = array[0])[1] ], 3);
 		assertEquals(array[0], array[1]);
 	}
 
@@ -100,18 +106,16 @@ public class MathTest {
 	@Test
 	public void testNaN() {
 		double x = 0.0d;
-		double y = -0.0d/0.0;
-		assertFalse(x != x);
-		assertTrue(y != y);
+		double y = -x/ZERO;
 		assertTrue(Double.isNaN(y));
 		assertFalse(Double.NaN == y);
+		assertTrue(y != y);
 		assertFalse(x < y);
 		assertFalse(x <= y);
 		assertFalse(x > y);
 		assertFalse(x >= y);
 		assertFalse(x == y);
 		assertTrue(x != y);
-		assertFalse((x < y) == !(x >= y));
 	}
 
 	/**
@@ -120,14 +124,14 @@ public class MathTest {
 	@Test
 	public void testOverflow() {
 		int i = Integer.MAX_VALUE;
-		assertEquals(0b0111_1111_1111_1111_1111_1111_1111_1111, i);
+		assertEquals(i, 0b0111_1111_1111_1111_1111_1111_1111_1111);
 		i = i + 1;
-		assertEquals(0b1000_0000_0000_0000_0000_0000_0000_0000, i);
+		assertEquals(i, 0b1000_0000_0000_0000_0000_0000_0000_0000);
 		assertEquals(Integer.MIN_VALUE, i);
 		i = 0;
-		assertEquals(0b0000_0000_0000_0000_0000_0000_0000_0000, i);
+		assertEquals(i, 0b0000_0000_0000_0000_0000_0000_0000_0000);
 		i = i - 1;
-		assertEquals(0b1111_1111_1111_1111_1111_1111_1111_1111, i);
+		assertEquals(i, 0b1111_1111_1111_1111_1111_1111_1111_1111);
 	}
 
 	/**
