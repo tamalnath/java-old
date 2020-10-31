@@ -1,0 +1,1 @@
+<?xml version="1.0" ?><S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"><S:Body><FindAllByIp xmlns="urn:vim25"><_this type="SearchIndex">ha-searchindex</_this><ip>${ip}</ip><vmSearch>true</vmSearch></FindAllByIp></S:Body></S:Envelope>

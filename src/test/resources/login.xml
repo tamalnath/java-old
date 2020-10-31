@@ -1,0 +1,1 @@
+<?xml version="1.0" ?><S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"><S:Body><Login xmlns="urn:vim25"><_this type="SessionManager">ha-sessionmgr</_this><userName>${username}</userName><password>${password}</password></Login></S:Body></S:Envelope>
